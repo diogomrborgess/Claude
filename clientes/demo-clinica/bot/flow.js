@@ -21,17 +21,22 @@
     step: 30,
     daysAhead: 6,
     minNoticeMin: 60,
-    handoff: 'Claro. Fale com a receção pelo 210 000 000, em horário de expediente.'
+    phone: '210 000 000',
+    handoff: 'Claro. A receção atende pelo 210 000 000, de segunda a sexta das 9h às 19h e ao sábado das 9h às 13h.'
   };
 
-  var WD = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  var WD = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+  var MONTHS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function iso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function toMin(t) { var p = t.split(':'); return +p[0] * 60 + +p[1]; }
   function fromMin(m) { return pad(Math.floor(m / 60)) + ':' + pad(m % 60); }
   function addMin(t, m) { return fromMin(toMin(t) + m); }
   function dow(dateISO) { var p = dateISO.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).getDay(); }
-  function dayLabel(dateISO) { var p = dateISO.split('-'); return WD[dow(dateISO)] + ' ' + p[2] + '/' + p[1]; }
+  function dayLabel(dateISO) { var p = dateISO.split('-'); return WD[dow(dateISO)] + ', ' + (+p[2]) + ' de ' + MONTHS[+p[1] - 1]; }
+  function timeLabel(t) { return t.replace(/^0/, '').replace(':', 'h'); }
+  function firstName(n) { var f = (n || '').trim().split(/\s+/)[0] || ''; return f.charAt(0).toUpperCase() + f.slice(1); }
+  function greeting(now) { var h = now.getHours(); return h < 13 ? 'Bom dia' : (h < 20 ? 'Boa tarde' : 'Boa noite'); }
   function norm(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(); }
 
   function upcomingDays(cfg, now) {
@@ -72,11 +77,12 @@
   }
   function list(items, labelFn) { return items.map(function (x, i) { return (i + 1) + '. ' + labelFn(x); }).join('\n'); }
   function pickSlot(text, slots) {
-    var t = norm(text).replace('h', ':').replace(/:$/, ':00');
-    var n = parseInt(t, 10);
+    var t = norm(text), n = parseInt(t, 10);
     if (String(n) === t && n >= 1 && n <= slots.length) return slots[n - 1];
-    if (/^\d{1,2}$/.test(t)) t = pad(+t) + ':00';
-    return slots.indexOf(t) >= 0 ? t : (slots.indexOf('0' + t) >= 0 ? '0' + t : null);
+    var m = t.match(/(\d{1,2})\s*(?:h|:)?\s*(\d{2})?/);
+    if (!m) return null;
+    var c = pad(+m[1]) + ':' + (m[2] || '00');
+    return slots.indexOf(c) >= 0 ? c : null;
   }
 
   // Devolve { session, replies: [texto...], options: [atalhos...] }
@@ -85,83 +91,88 @@
     var t = norm(text);
     function out(msgs, opts) { return { session: session, replies: [].concat(msgs), options: opts || [] }; }
 
-    if (/(humano|pessoa|rececao|rececionista|falar com)/.test(t)) return out(cfg.handoff);
+    if (/(humano|pessoa|rececao|rececionista|falar com|ligar)/.test(t)) return out(cfg.handoff);
     if (/^(cancelar|recomecar|reiniciar|menu)$/.test(t)) session.state = 'start';
+    if (session.state !== 'start' && session.state !== 'name' && /(preco|quanto custa|valor|orcamento|custo)/.test(t)) {
+      return out('Os valores dependem de cada caso e são explicados na consulta de avaliação. Se quiser, marco já uma.', ['Marcar consulta']);
+    }
 
+    function serviceList() { return list(cfg.services, function (x) { return x.label; }); }
     async function askService() {
       session.state = 'service';
-      return out('Que serviço procura?\n' + list(cfg.services, function (s) { return s.label; }),
-        cfg.services.map(function (s) { return s.label; }));
+      return out('Que consulta quer marcar?\n' + serviceList(), cfg.services.map(function (x) { return x.label; }));
     }
     async function askDay() {
       var days = [];
       for (var d of upcomingDays(cfg, now)) {
         if ((await freeSlots(cfg, provider, d, session.minutes, now)).length) days.push(d);
       }
-      if (!days.length) return out('De momento não tenho horários livres. ' + cfg.handoff);
+      if (!days.length) return out('Neste momento não tenho horários livres. ' + cfg.handoff);
       session.days = days; session.state = 'day';
-      return out('Que dia prefere?\n' + list(days, dayLabel), days.map(dayLabel));
+      return out('Para que dia prefere?\n' + list(days, dayLabel), days.map(dayLabel));
     }
     async function askTime() {
       var slots = await freeSlots(cfg, provider, session.date, session.minutes, now);
       if (!slots.length) return askDay();
       if (slots.length > 8) slots = slots.filter(function (_, i) { return i % Math.ceil(slots.length / 8) === 0; });
       session.slots = slots; session.state = 'time';
-      return out('Horários livres em ' + dayLabel(session.date) + ':\n' + list(slots, function (s) { return s; }), slots);
+      return out('Tenho estes horários para ' + dayLabel(session.date) + ':\n' + list(slots, timeLabel), slots.map(timeLabel));
     }
 
     switch (session.state) {
       case 'start': {
         var first = await askService();
-        first.replies.unshift('Olá! Sou o assistente da ' + cfg.clinic + '. Posso marcar a sua consulta agora. Guardo só o nome e o telemóvel, para a marcação. Para falar com uma pessoa, escreva "receção".');
+        first.replies.unshift(greeting(now) + '! Fala a ' + cfg.clinic + '.');
         return first;
       }
       case 'service': {
-        var s = pick(text, cfg.services, function (x) { return x.label; });
-        if (!s) return out('Não percebi. Escolha um número da lista, por favor.\n' + list(cfg.services, function (x) { return x.label; }), cfg.services.map(function (x) { return x.label; }));
-        session.service = s.label; session.minutes = s.minutes;
+        var sv = pick(text, cfg.services, function (x) { return x.label; });
+        if (!sv) return out('Desculpe, não percebi. Pode escolher o número da consulta?\n' + serviceList(), cfg.services.map(function (x) { return x.label; }));
+        session.service = sv.label; session.minutes = sv.minutes;
         return askDay();
       }
       case 'day': {
         var d = pick(text, session.days, dayLabel);
-        if (!d) return out('Escolha um dos dias da lista, por favor.\n' + list(session.days, dayLabel), session.days.map(dayLabel));
+        if (!d) return out('Pode indicar o número do dia, por favor?\n' + list(session.days, dayLabel), session.days.map(dayLabel));
         session.date = d;
         return askTime();
       }
       case 'time': {
         var tm = pickSlot(text, session.slots);
-        if (!tm) return out('Escolha um dos horários da lista, por favor.\n' + list(session.slots, function (x) { return x; }), session.slots);
+        if (!tm) return out('Pode indicar o número ou a hora, por favor?\n' + list(session.slots, timeLabel), session.slots.map(timeLabel));
         session.time = tm; session.state = 'name';
-        return out('Qual é o seu nome?');
+        return out('Perfeito. Para a marcação, qual é o seu nome?');
       }
       case 'name': {
         var name = (text || '').trim();
-        if (name.length < 2) return out('Pode dizer-me o seu nome, por favor?');
+        if (name.length < 2) return out('Qual é o seu nome, por favor?');
         session.name = name; session.state = 'confirm';
-        return out('Confirma a marcação?\n' + session.service + '\n' + dayLabel(session.date) + ' às ' + session.time + '\nNome: ' + session.name + '\nTelemóvel: ' + ctx.phone + '\nResponda SIM para confirmar ou NÃO para alterar.', ['Sim', 'Não']);
+        return out(['Então fica assim:\n' + session.service + '\n' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + '\nEm nome de ' + name + ', com o contacto ' + ctx.phone + '.',
+          'Está bem? Uso o nome e o número só para esta marcação.'], ['Sim, está bem', 'Quero alterar']);
       }
       case 'confirm': {
-        if (/^(sim|s|confirmo|confirmar|ok)$/.test(t)) {
+        if (/^(sim|s|ok|certo|confirmo|confirmar|perfeito|esta bem|pode ser|claro)\b/.test(t)) {
           var still = await freeSlots(cfg, provider, session.date, session.minutes, now);
           if (still.indexOf(session.time) < 0) {
             var again = await askTime();
-            again.replies.unshift('Esse horário acabou de ficar ocupado. Escolha outro, por favor.');
+            again.replies.unshift('Peço desculpa, esse horário acabou de ser ocupado.');
             return again;
           }
           await provider.book({ date: session.date, time: session.time, minutes: session.minutes, service: session.service, name: session.name, phone: ctx.phone });
           session.state = 'done';
-          return out('Marcação confirmada: ' + session.service + ', ' + dayLabel(session.date) + ' às ' + session.time + '. Para alterar ou cancelar, fale com a receção. Até breve!');
+          return out(['Está marcado, ' + firstName(session.name) + '. Esperamos por si ' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + '.',
+            'Se precisar de alterar ou cancelar, ligue para o ' + cfg.phone + '.']);
         }
-        if (/^(nao|n)$/.test(t)) return askService();
-        return out('Responda SIM para confirmar ou NÃO para alterar.', ['Sim', 'Não']);
+        if (/^(nao|n|quero alterar|alterar|mudar)/.test(t)) return askService();
+        return out('Posso confirmar a marcação?', ['Sim, está bem', 'Quero alterar']);
       }
       default: { // done
-        if (/marc/.test(t)) { session.state = 'start'; return handle(session, '', ctx); }
-        return out('A sua marcação está confirmada. Para marcar outra, escreva "marcar".', ['Marcar']);
+        if (/marc|outra|nova/.test(t)) { session.state = 'start'; return handle(session, '', ctx); }
+        return out('A sua marcação está confirmada. Se quiser marcar outra consulta, é só dizer.', ['Marcar consulta']);
       }
     }
   }
 
   return { DEFAULTS: DEFAULTS, createSession: createSession, handle: handle, upcomingDays: upcomingDays,
-    freeSlots: freeSlots, dayLabel: dayLabel, toMin: toMin, fromMin: fromMin, addMin: addMin };
+    freeSlots: freeSlots, dayLabel: dayLabel, timeLabel: timeLabel, toMin: toMin, fromMin: fromMin, addMin: addMin };
 });

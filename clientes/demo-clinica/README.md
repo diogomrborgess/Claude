@@ -3,7 +3,7 @@
 Modelo para adaptar a cada clínica. Mostra o que fechamos na videochamada.
 
 ## O que há aqui
-- `index.html`: site de demonstração. Abre-se direto no navegador (duplo clique) ou partilha-se o ecrã. Tem a conversa tipo WhatsApp e a agenda da clínica, que se atualiza ao confirmar uma marcação. Os dados da agenda são de exemplo e não ficam guardados.
+- `index.html`: site de demonstração. Abre-se direto no navegador (duplo clique) ou partilha-se o ecrã. É o site de uma clínica, com o assistente de marcações a abrir em cima (botão "Marcar pelo WhatsApp"). A barra preta no topo é só da demonstração: "Ver agenda da clínica" mostra o que a receção vê e atualiza-se ao confirmar uma marcação. Para a videochamada, abrir `index.html#demo` mostra tudo de uma vez. Os dados da agenda são de exemplo e não ficam guardados.
 - `bot/flow.js`: a conversa (serviço, dia, hora, nome, confirmação). É o mesmo código na demonstração e no WhatsApp real.
 - `bot/calendar.js`: lê as horas ocupadas e cria marcações no Google Calendar da clínica.
 - `bot/server.js`: recebe as mensagens do WhatsApp (API oficial da Meta) e responde.
