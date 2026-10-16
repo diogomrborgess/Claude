@@ -9,11 +9,11 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 
 ## Ferramentas
 - **Lovable** (workspace "Diogo's Lovable", plano Pro): construir os sites.
-- **Notion**: base de dados "Empresas a contactar" (https://app.notion.com/p/bf240ecc54da4c5f87b2345f58db2249) e página "Painel: Clínicas de estética e cirurgia plástica".
+- **Notion** (espaço de diogo@dbweb.pt): base de dados "Empresas a contactar" (https://app.notion.com/p/8a234b4d68824ffaa99e8ddbce0ffaf0) e página "Painel: Clínicas de estética e cirurgia plástica".
 - Idioma de trabalho: português (Portugal).
 
 ## Estado (16 de outubro de 2026)
-- 17 clínicas no Notion (Lisboa, Porto, Gaia, Coimbra, Algarve), todas em "Por contactar". Nenhum site foi verificado.
+- 15 clínicas no Notion (Lisboa, Porto, Gaia, Coimbra, Algarve), com horários onde foram encontrados; LMR e António Conde removidas, todas em "Por contactar". Nenhum site foi verificado.
 - Meta: 100 clínicas.
 - Contactos conhecidos: HD Clinic, tel. 968422315, adm.hdclinic@gmail.com (via Portal da Queixa).
 
