@@ -17,6 +17,9 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 - Meta: 100 clínicas.
 - Contactos conhecidos: HD Clinic, tel. 968422315, adm.hdclinic@gmail.com (via Portal da Queixa).
 
+## Demo pronta
+`clientes/demo-clinica/`: site + assistente de marcações (conversa tipo WhatsApp) + agenda. Abrir `index.html`. Ver o README da pasta para ligar ao WhatsApp e ao Google Calendar reais (ainda não testado com contas reais).
+
 ## Próximos passos
 1. Abrir o site de cada clínica e preencher "Tem site?" no Notion (sem site, site fraco, site bom). Apagar as com site bom.
 2. Juntar telefone, email e Instagram das que ficam.

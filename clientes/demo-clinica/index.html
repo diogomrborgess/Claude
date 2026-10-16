@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Exemplo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap">
+<style>
+/* Site de demonstração: cabeçalho, serviços e, em destaque, o assistente de marcações com a agenda ao lado. */
+:root{
+  --bg:#f5f7f7; --surface:#ffffff; --ink:#14232b; --muted:#5b6c74; --line:#dbe3e5;
+  --accent:#1f6f78; --accent-ink:#ffffff; --soft:#e2f0f1;
+  --wa-bg:#e9e3d8; --me:#d7f2dd; --bot:#ffffff;
+  --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1a1f; --surface:#17252c; --ink:#e7eff1; --muted:#9db0b7; --line:#28393f;
+  --accent:#5cc0c9; --accent-ink:#0b1519; --soft:#173238; --wa-bg:#1b2a30; --me:#1d4a3a; --bot:#22343c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1a1f; --surface:#17252c; --ink:#e7eff1; --muted:#9db0b7; --line:#28393f;
+  --accent:#5cc0c9; --accent-ink:#0b1519; --soft:#173238; --wa-bg:#1b2a30; --me:#1d4a3a; --bot:#22343c; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:18px;flex-wrap:wrap}
+.logo{font-family:var(--serif);font-size:1.5rem}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700;border:0;cursor:pointer;font:inherit;font-weight:700}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hero{padding-block:48px 40px;display:grid;gap:18px;max-width:680px}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.1rem,6vw,3.4rem);line-height:1.1;margin:0;text-wrap:balance}
+.hero p{color:var(--muted);font-size:1.1rem;margin:0}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding-block:8px 40px}
+.svc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.svc h3{margin:0 0 6px;font-family:var(--serif);font-weight:400;font-size:1.3rem}
+.svc p{margin:0;color:var(--muted);font-size:.95rem}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,4vw,2.2rem);margin:0 0 6px}
+.lead{color:var(--muted);margin:0 0 20px;max-width:620px}
+.demo{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:start;padding-bottom:56px}
+@media (max-width:760px){.demo{grid-template-columns:minmax(0,1fr)}}
+.phone{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;height:560px}
+.phone-top{background:var(--accent);color:var(--accent-ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.phone-top b{display:block}
+.phone-top small{opacity:.85}
+.reset{background:transparent;border:1px solid currentColor;color:inherit;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;font-size:.85rem}
+.msgs{flex:1;overflow-y:auto;background:var(--wa-bg);padding:14px;display:flex;flex-direction:column;gap:8px}
+.b{max-width:84%;padding:8px 12px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem}
+.b.bot{background:var(--bot);align-self:flex-start;border-top-left-radius:3px}
+.b.me{background:var(--me);align-self:flex-end;border-top-right-radius:3px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0;background:var(--surface);min-height:8px}
+.chip{background:var(--soft);color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;font:inherit;font-size:.88rem}
+form.send{display:flex;gap:8px;padding:10px 12px;background:var(--surface)}
+form.send input{flex:1;min-width:0;font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink)}
+form.send button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:0 18px;font:inherit;font-weight:700;cursor:pointer}
+.agenda{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
+.agenda h3{margin:0 0 4px;font-size:1.05rem}
+.agenda .note{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.ev{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.ev time{font-weight:700;font-variant-numeric:tabular-nums}
+.ev span{display:block;color:var(--muted);font-size:.9rem}
+.ev.new{animation:pop .6s ease-out}
+.ev.busy{opacity:.55}
+@keyframes pop{from{background:var(--soft)}to{background:transparent}}
+@media (prefers-reduced-motion:reduce){.ev.new{animation:none}}
+.empty{color:var(--muted);padding:10px 0}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Clínica Exemplo</div>
+    <nav><a href="#servicos">Serviços</a><a href="#marcar">Marcar consulta</a><a href="#contacto">Contacto</a></nav>
+  </header>
+
+  <section class="hero">
+    <h1>Marque a sua consulta em menos de um minuto</h1>
+    <p>Escolha o serviço, o dia e a hora. Sem chamadas e sem esperar por resposta, mesmo à noite e ao fim de semana.</p>
+    <div><a class="btn" href="#marcar">Marcar consulta</a></div>
+  </section>
+
+  <section id="servicos" class="services" aria-label="Serviços">
+    <div class="svc"><h3>Consulta de avaliação</h3><p>Conversa inicial com a equipa médica para perceber o que procura.</p></div>
+    <div class="svc"><h3>Harmonização facial</h3><p>Tratamentos para um resultado natural, planeados consigo.</p></div>
+    <div class="svc"><h3>Tratamento laser</h3><p>Sessões com avaliação prévia e acompanhamento.</p></div>
+  </section>
+
+  <section id="marcar">
+    <h2>Assistente de marcações</h2>
+    <p class="lead">Demonstração: à esquerda, a conversa que o paciente tem no WhatsApp. À direita, a agenda da clínica, que se atualiza no momento em que a marcação é confirmada.</p>
+    <div class="demo">
+      <div class="phone" aria-label="Conversa no WhatsApp">
+        <div class="phone-top"><div><b>Clínica Exemplo</b><small>assistente de marcações</small></div><button class="reset" id="reset" type="button">Recomeçar</button></div>
+        <div class="msgs" id="msgs" role="log" aria-live="polite"></div>
+        <div class="chips" id="chips"></div>
+        <form class="send" id="form" autocomplete="off">
+          <input id="text" type="text" placeholder="Escreva uma mensagem" aria-label="Mensagem">
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+      <div class="agenda">
+        <h3>Agenda da clínica</h3>
+        <p class="note">Horários ocupados de exemplo e as marcações feitas nesta conversa. Na versão real, é o Google Calendar da clínica.</p>
+        <div id="agenda"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contacto">Clínica Exemplo · 210 000 000 · Dados de demonstração. As marcações feitas aqui não são guardadas.</footer>
+</div>
+
+<script src="bot/flow.js"></script>
+<script>
+(function(){
+  var B=window.ClinicBot, cfg=B.DEFAULTS, PHONE='+351 910 000 000';
+  var events=[]; // marcações feitas na demonstração
+
+  function pseudoBusy(d){ // horários "ocupados" de exemplo, sempre iguais para o mesmo dia
+    var h=0; for(var i=0;i<d.length;i++) h=(h*31+d.charCodeAt(i))>>>0;
+    var starts=['09:00','10:30','11:30','14:00','15:30','17:00'], out=[];
+    starts.forEach(function(s,i){ if((h>>i)&1) out.push({start:s,end:B.addMin(s,60)}); });
+    return out;
+  }
+  var provider={
+    busy:function(d){ return Promise.resolve(pseudoBusy(d).concat(events.filter(function(e){return e.date===d}).map(function(e){return {start:e.time,end:B.addMin(e.time,e.minutes)}}))); },
+    book:function(e){ events.push(e); renderAgenda(e); return Promise.resolve({id:String(events.length)}); }
+  };
+
+  var msgs=document.getElementById('msgs'), chips=document.getElementById('chips'),
+      form=document.getElementById('form'), input=document.getElementById('text'), agenda=document.getElementById('agenda');
+  var session, busy=false;
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function bubble(cls,t){ var d=document.createElement('div'); d.className='b '+cls; d.textContent=t; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; }
+  function setChips(list){ chips.innerHTML=''; (list||[]).slice(0,8).forEach(function(o){ var b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=o; b.addEventListener('click',function(){send(o)}); chips.appendChild(b); }); }
+  function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+
+  async function send(text){
+    if(busy||!text.trim()) return; busy=true; setChips([]); input.value='';
+    if(text!=='') bubble('me',text);
+    var res=await B.handle(session,text,{cfg:cfg,provider:provider,phone:PHONE});
+    for(var i=0;i<res.replies.length;i++){ await sleep(350); bubble('bot',res.replies[i]); }
+    setChips(res.options); busy=false;
+  }
+  function start(){ session=B.createSession(); msgs.innerHTML=''; setChips([]); busy=false; send('olá'); msgs.innerHTML=''; }
+
+  function renderAgenda(fresh){
+    var days=B.upcomingDays(cfg,new Date()), html='', any=false;
+    days.forEach(function(d){
+      var rows=pseudoBusy(d).map(function(b){return {time:b.start,end:b.end,label:'Ocupado',sub:'Outro paciente',cls:'busy'}});
+      events.filter(function(e){return e.date===d}).forEach(function(e){
+        rows.push({time:e.time,end:B.addMin(e.time,e.minutes),label:e.service+' · '+e.name,sub:e.phone+' · via WhatsApp',cls:'new',fresh:e===fresh});
+      });
+      rows.sort(function(a,b){return a.time<b.time?-1:1});
+      if(!rows.length) return; any=true;
+      html+='<h4 style="margin:14px 0 2px;text-transform:capitalize">'+esc(B.dayLabel(d))+'</h4>';
+      rows.forEach(function(r){ html+='<div class="ev '+(r.cls==='busy'?'busy':(r.fresh?'new':''))+'"><time>'+r.time+'–'+r.end+'</time><div>'+esc(r.label)+'<span>'+esc(r.sub)+'</span></div></div>'; });
+    });
+    agenda.innerHTML=any?html:'<p class="empty">Sem marcações.</p>';
+  }
+
+  form.addEventListener('submit',function(e){ e.preventDefault(); send(input.value); });
+  document.getElementById('reset').addEventListener('click',function(){ events.length=0; renderAgenda(); start(); });
+  renderAgenda(); start();
+})();
+</script>
+</body>
+</html>
