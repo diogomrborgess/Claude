@@ -20,6 +20,8 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 ## Demo pronta
 `clientes/demo-clinica/`: site + assistente de marcações (conversa tipo WhatsApp) + agenda. Abrir `index.html`. Ver o README da pasta para ligar ao WhatsApp e ao Google Calendar reais (ainda não testado com contas reais).
 
+`clientes/mymoment/`: a mesma demo adaptada à MyMoment (proposta de demonstração, não é o site oficial). Telefone, email, ERS e equipa por preencher; ver o README da pasta.
+
 ## Próximos passos
 1. Abrir o site de cada clínica e preencher "Tem site?" no Notion (sem site, site fraco, site bom). Apagar as com site bom.
 2. Juntar telefone, email e Instagram das que ficam.
