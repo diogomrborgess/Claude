@@ -8,7 +8,7 @@ Clínicas de média dimensão (nem consultório muito pequeno, nem grupo grande)
 Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúde Viável).
 
 ## Ferramentas
-- **Lovable** (workspace "Diogo's Lovable", plano Pro): construir os sites.
+- **Claude Code**: construir os sites e os previews. Cada cliente numa pasta `clientes/<nome-da-clinica>/` deste repo. Funciona na sessão cloud (iPhone) e no MacBook.
 - **Notion** (espaço de diogo@dbweb.pt): base de dados "Empresas a contactar" (https://app.notion.com/p/8a234b4d68824ffaa99e8ddbce0ffaf0) e página "Painel: Clínicas de estética e cirurgia plástica".
 - Idioma de trabalho: português (Portugal).
 
@@ -21,7 +21,7 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 1. Abrir o site de cada clínica e preencher "Tem site?" no Notion (sem site, site fraco, site bom). Apagar as com site bom.
 2. Juntar telefone, email e Instagram das que ficam.
 3. Procurar mais clínicas até 100 (Braga, Setúbal, Cascais, Funchal, Aveiro, Leiria).
-4. Criar 3 sites de demonstração no Lovable.
+4. Criar 3 previews de clínicas no Claude Code (`clientes/<clinica>/`), só para quem aceitar a videochamada.
 5. Escrever a mensagem de primeiro contacto.
 
 ## Limitações conhecidas
