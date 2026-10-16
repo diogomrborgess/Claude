@@ -1,4 +1,5 @@
-/* Lógica da conversa de marcações. Corre no navegador (demonstração) e em Node (WhatsApp). */
+/* Conversa de marcações para clínica de cirurgia plástica e medicina estética.
+   Corre no navegador (demonstração) e em Node (WhatsApp). */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.ClinicBot = factory();
@@ -8,11 +9,18 @@
   var DEFAULTS = {
     clinic: 'Clínica Exemplo',
     tz: 'Europe/Lisbon',
-    services: [
-      { id: 'avaliacao', label: 'Consulta de avaliação', minutes: 30 },
-      { id: 'harmonizacao', label: 'Harmonização facial', minutes: 60 },
-      { id: 'laser', label: 'Tratamento laser', minutes: 60 }
+    phone: '210 000 000',
+    address: 'Rua Exemplo, 123, 1.º Esq., Lisboa',
+    // Tipos de consulta. "areas" é a zona que o paciente quer avaliar.
+    types: [
+      { id: 'cirurgia', label: 'Cirurgia plástica', consult: 'Avaliação de cirurgia plástica', minutes: 45, areas: ['Rosto', 'Corpo', 'Mama', 'Outra zona'] },
+      { id: 'estetica', label: 'Medicina estética', consult: 'Avaliação de medicina estética', minutes: 30, areas: ['Rosto', 'Corpo', 'Pele e cabelo'] },
+      { id: 'video', label: 'Consulta por videochamada', consult: 'Avaliação por videochamada', minutes: 30, remote: true, areas: ['Rosto', 'Corpo', 'Mama', 'Pele e cabelo'] },
+      { id: 'info', label: 'Só quero informação', info: true }
     ],
+    notSure: 'Ainda não sei',
+    prepNote: 'Se tomar medicação habitual, traga a lista para a consulta.',
+    videoNote: 'A receção envia-lhe o link da videochamada antes da hora.',
     // 0 = domingo ... 6 = sábado. Sem entrada = fechado.
     hours: {
       1: ['09:00', '19:00'], 2: ['09:00', '19:00'], 3: ['09:00', '19:00'],
@@ -21,8 +29,8 @@
     step: 30,
     daysAhead: 6,
     minNoticeMin: 60,
-    phone: '210 000 000',
-    handoff: 'Claro. A receção atende pelo 210 000 000, de segunda a sexta das 9h às 19h e ao sábado das 9h às 13h.'
+    handoff: 'Claro. A receção atende pelo 210 000 000, de segunda a sexta das 9h às 19h e ao sábado das 9h às 13h.',
+    urgent: 'Se tem uma complicação depois de um procedimento, ligue já para a clínica: 210 000 000. Em caso de urgência, ligue 112.'
   };
 
   var WD = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
@@ -84,6 +92,7 @@
     var c = pad(+m[1]) + ':' + (m[2] || '00');
     return slots.indexOf(c) >= 0 ? c : null;
   }
+  function id(x) { return x; }
 
   // Devolve { session, replies: [texto...], options: [atalhos...] }
   async function handle(session, text, ctx) {
@@ -91,44 +100,78 @@
     var t = norm(text);
     function out(msgs, opts) { return { session: session, replies: [].concat(msgs), options: opts || [] }; }
 
+    // Situações que não esperam pelo guião
+    if (/(urgente|urgencia|emergencia|complicacao|sangr|febre|infec|dor forte|112)/.test(t)) return out(cfg.urgent);
     if (/(humano|pessoa|rececao|rececionista|falar com|ligar)/.test(t)) return out(cfg.handoff);
     if (/^(cancelar|recomecar|reiniciar|menu)$/.test(t)) session.state = 'start';
-    if (session.state !== 'start' && session.state !== 'name' && /(preco|quanto custa|valor|orcamento|custo)/.test(t)) {
-      return out('Os valores dependem de cada caso e são explicados na consulta de avaliação. Se quiser, marco já uma.', ['Marcar consulta']);
+    var mid = session.state !== 'start' && session.state !== 'name' && session.state !== 'infoName' && session.state !== 'infoTopic';
+    if (mid && /(preco|quanto custa|valor|orcamento|custo)/.test(t)) {
+      return out('O valor depende de cada caso e é apresentado depois da avaliação, quando o médico percebe o que precisa. Quer que marque a consulta?', ['Marcar consulta']);
+    }
+    if (mid && /(medo|duvida|receio|nervos|inseguranc)/.test(t)) {
+      return out('É normal ter dúvidas. A consulta serve para isso: o médico explica o que é possível, os riscos e o tempo de recuperação, e a decisão é sempre sua. Quer marcar?', ['Marcar consulta']);
     }
 
-    function serviceList() { return list(cfg.services, function (x) { return x.label; }); }
-    async function askService() {
-      session.state = 'service';
-      return out('Que consulta quer marcar?\n' + serviceList(), cfg.services.map(function (x) { return x.label; }));
+    function typeList() { return list(cfg.types, function (x) { return x.label; }); }
+    function typeLabels() { return cfg.types.map(function (x) { return x.label; }); }
+    async function askType() {
+      session.state = 'type';
+      return out('O que pretende?\n' + typeList(), typeLabels());
+    }
+    function areaOptions() { return session.type.areas.concat([cfg.notSure]); }
+    async function askArea() {
+      session.state = 'area';
+      return out('Que zona gostava de avaliar?\n' + list(areaOptions(), id), areaOptions());
     }
     async function askDay() {
       var days = [];
       for (var d of upcomingDays(cfg, now)) {
-        if ((await freeSlots(cfg, provider, d, session.minutes, now)).length) days.push(d);
+        if ((await freeSlots(cfg, provider, d, session.type.minutes, now)).length) days.push(d);
       }
       if (!days.length) return out('Neste momento não tenho horários livres. ' + cfg.handoff);
       session.days = days; session.state = 'day';
       return out('Para que dia prefere?\n' + list(days, dayLabel), days.map(dayLabel));
     }
     async function askTime() {
-      var slots = await freeSlots(cfg, provider, session.date, session.minutes, now);
+      var slots = await freeSlots(cfg, provider, session.date, session.type.minutes, now);
       if (!slots.length) return askDay();
       if (slots.length > 8) slots = slots.filter(function (_, i) { return i % Math.ceil(slots.length / 8) === 0; });
       session.slots = slots; session.state = 'time';
       return out('Tenho estes horários para ' + dayLabel(session.date) + ':\n' + list(slots, timeLabel), slots.map(timeLabel));
     }
+    function serviceName() {
+      return session.type.consult + (session.area && session.area !== cfg.notSure ? ' · ' + session.area : '');
+    }
 
     switch (session.state) {
       case 'start': {
-        var first = await askService();
+        var first = await askType();
         first.replies.unshift(greeting(now) + '! Fala a ' + cfg.clinic + '.');
         return first;
       }
-      case 'service': {
-        var sv = pick(text, cfg.services, function (x) { return x.label; });
-        if (!sv) return out('Desculpe, não percebi. Pode escolher o número da consulta?\n' + serviceList(), cfg.services.map(function (x) { return x.label; }));
-        session.service = sv.label; session.minutes = sv.minutes;
+      case 'type': {
+        var ty = pick(text, cfg.types, function (x) { return x.label; });
+        if (!ty) return out('Desculpe, não percebi. Pode escolher o número?\n' + typeList(), typeLabels());
+        session.type = ty;
+        if (ty.info) { session.state = 'infoName'; return out('Com todo o gosto. Diga-me o seu nome e a equipa entra em contacto consigo.'); }
+        return askArea();
+      }
+      case 'infoName': {
+        var n0 = (text || '').trim();
+        if (n0.length < 2) return out('Qual é o seu nome, por favor?');
+        session.name = n0; session.state = 'infoTopic';
+        return out('Obrigado, ' + firstName(n0) + '. Sobre o que gostava de saber? Pode escrever numa frase.');
+      }
+      case 'infoTopic': {
+        if (provider.lead) await provider.lead({ name: session.name, phone: ctx.phone, topic: (text || '').trim() });
+        session.state = 'done';
+        return out(['Fica registado. A equipa entra em contacto consigo, pelo número com que nos escreveu, assim que possível.',
+          'Se preferir falar já com alguém, ligue para o ' + cfg.phone + '.']);
+      }
+      case 'area': {
+        var ar = pick(text, areaOptions(), id);
+        if (!ar) return out('Pode escolher uma das opções?\n' + list(areaOptions(), id), areaOptions());
+        session.area = ar;
         return askDay();
       }
       case 'day': {
@@ -147,28 +190,30 @@
         var name = (text || '').trim();
         if (name.length < 2) return out('Qual é o seu nome, por favor?');
         session.name = name; session.state = 'confirm';
-        return out(['Então fica assim:\n' + session.service + '\n' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + '\nEm nome de ' + name + ', com o contacto ' + ctx.phone + '.',
+        return out(['Então fica assim:\n' + serviceName() + '\n' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + '\nEm nome de ' + name + ', com o contacto ' + ctx.phone + '.',
           'Está bem? Uso o nome e o número só para esta marcação.'], ['Sim, está bem', 'Quero alterar']);
       }
       case 'confirm': {
         if (/^(sim|s|ok|certo|confirmo|confirmar|perfeito|esta bem|pode ser|claro)\b/.test(t)) {
-          var still = await freeSlots(cfg, provider, session.date, session.minutes, now);
+          var still = await freeSlots(cfg, provider, session.date, session.type.minutes, now);
           if (still.indexOf(session.time) < 0) {
             var again = await askTime();
             again.replies.unshift('Peço desculpa, esse horário acabou de ser ocupado.');
             return again;
           }
-          await provider.book({ date: session.date, time: session.time, minutes: session.minutes, service: session.service, name: session.name, phone: ctx.phone });
+          await provider.book({ date: session.date, time: session.time, minutes: session.type.minutes, service: serviceName(), name: session.name, phone: ctx.phone });
           session.state = 'done';
-          return out(['Está marcado, ' + firstName(session.name) + '. Esperamos por si ' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + '.',
-            'Se precisar de alterar ou cancelar, ligue para o ' + cfg.phone + '.']);
+          var msgs = ['Está marcado, ' + firstName(session.name) + '. Esperamos por si ' + dayLabel(session.date) + ', às ' + timeLabel(session.time) + (session.type.remote ? '.' : ', na ' + cfg.address + '.')];
+          msgs.push(session.type.remote ? cfg.videoNote : cfg.prepNote);
+          msgs.push('Se precisar de alterar ou cancelar, ligue para o ' + cfg.phone + '.');
+          return out(msgs);
         }
-        if (/^(nao|n|quero alterar|alterar|mudar)/.test(t)) return askService();
+        if (/^(nao|n|quero alterar|alterar|mudar)/.test(t)) return askType();
         return out('Posso confirmar a marcação?', ['Sim, está bem', 'Quero alterar']);
       }
       default: { // done
         if (/marc|outra|nova/.test(t)) { session.state = 'start'; return handle(session, '', ctx); }
-        return out('A sua marcação está confirmada. Se quiser marcar outra consulta, é só dizer.', ['Marcar consulta']);
+        return out('Já ficou tudo registado. Se quiser marcar outra consulta, é só dizer.', ['Marcar consulta']);
       }
     }
   }

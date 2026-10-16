@@ -35,6 +35,15 @@ function createCalendarProvider({ calendarId, tz, credentials }) {
         start: { dateTime: `${date}T${time}:00`, timeZone: tz },
         end: { dateTime: `${date}T${B.addMin(time, minutes)}:00`, timeZone: tz } } });
       return { id: data.id };
+    },
+    // Pedido de informação: evento de dia inteiro, hoje, que não bloqueia horários.
+    async lead({ name, phone, topic }) {
+      const day = localParts(Date.now(), tz).date;
+      const next = new Date(Date.parse(day + 'T00:00:00Z') + 864e5).toISOString().slice(0, 10);
+      await cal.events.insert({ calendarId, requestBody: {
+        summary: `Contactar: ${name} (pedido de informação)`,
+        description: `Telemóvel: ${phone}\nAssunto: ${topic}\nOrigem: WhatsApp`,
+        start: { date: day }, end: { date: next }, transparency: 'transparent' } });
     }
   };
 }

@@ -17,7 +17,8 @@ if (env.GOOGLE_SERVICE_ACCOUNT_JSON && env.GOOGLE_CALENDAR_ID) {
   const mem = [];
   provider = {
     async busy(d) { return mem.filter(e => e.date === d).map(e => ({ start: e.time, end: B.addMin(e.time, e.minutes) })); },
-    async book(e) { mem.push(e); return { id: String(mem.length) }; }
+    async book(e) { mem.push(e); return { id: String(mem.length) }; },
+    async lead(l) { console.log('Pedido de informação:', l); }
   };
 }
 

@@ -71,6 +71,32 @@ dd{margin:0;font-variant-numeric:tabular-nums}
 footer{background:var(--stone);color:var(--muted);font-size:.85rem}
 footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
+/* Procedimentos, percurso, equipa, perguntas */
+.areas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;border-top:1px solid var(--line);padding-top:24px}
+@media (max-width:900px){.areas{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.areas{grid-template-columns:minmax(0,1fr)}}
+.area h3{font-family:var(--serif);font-weight:400;font-size:1.5rem;margin:0 0 14px}
+.kind{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.area ul{list-style:none;margin:0;padding:0}
+.area li{padding:5px 0;border-bottom:1px solid var(--line)}
+.steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.steps li{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1.5fr);gap:20px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.steps .n{font-family:var(--serif);font-size:1.5rem;color:var(--accent)}
+.steps h3{font-family:var(--serif);font-weight:400;font-size:1.3rem;margin:0}
+.steps p{margin:0;color:var(--muted)}
+@media (max-width:640px){.steps li{grid-template-columns:40px minmax(0,1fr)}.steps p{grid-column:2}}
+.team{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+@media (max-width:640px){.team{grid-template-columns:minmax(0,1fr)}}
+.person{border-top:1px solid var(--line);padding-top:16px}
+.person h3{font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0}
+.person p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+details{border-top:1px solid var(--line);padding:16px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-family:var(--serif);font-size:1.2rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";color:var(--accent)}
+details[open] summary::after{content:"–"}
+details p{margin:10px 0 0;color:var(--muted);max-width:42em}
+
 /* Assistente de marcações (conversa) */
 .fab{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:30}
 .chat{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));width:380px;height:min(600px,calc(100dvh - 40px));background:var(--wa-bg);border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.28);display:none;flex-direction:column;overflow:hidden;z-index:40;color:var(--wa-ink)}
@@ -127,7 +153,7 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
 <header><div class="wrap">
   <a class="brand" href="#">Clínica Exemplo<small>Medicina estética e cirurgia plástica</small></a>
   <nav>
-    <a href="#consultas">Consultas</a><a href="#visitar">Horário e contacto</a>
+    <a href="#procedimentos">Procedimentos</a><a href="#percurso">Como decorre</a><a href="#visitar">Horário e contacto</a>
     <button class="btn" type="button" data-open-chat>Marcar consulta</button>
   </nav>
 </div></header>
@@ -135,24 +161,57 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
 <main>
 <section class="hero"><div class="wrap">
   <div>
-    <p class="eyebrow">Lisboa</p>
-    <h1>Medicina estética e cirurgia plástica</h1>
-    <p class="sub">Consulta de avaliação com a equipa médica, de segunda a sábado. Pode marcar pelo WhatsApp a qualquer hora e a resposta é imediata.</p>
+    <p class="eyebrow">Consulta de avaliação</p>
+    <h1>Uma decisão importante merece uma conversa sem pressa</h1>
+    <p class="sub">Na primeira consulta o médico ouve o que pretende, explica o que é possível, os riscos e o tempo de recuperação. A decisão é sempre sua.</p>
     <div class="actions">
-      <button class="btn" type="button" data-open-chat>Marcar pelo WhatsApp</button>
-      <a class="btn line" href="#consultas">Ver consultas</a>
+      <button class="btn" type="button" data-open-chat>Marcar consulta de avaliação</button>
+      <a class="btn line" href="#procedimentos">Ver procedimentos</a>
     </div>
   </div>
   <div class="arch" role="img" aria-label="Ilustração decorativa"></div>
 </div></section>
 
-<section class="block" id="consultas"><div class="wrap">
-  <h2>Consultas</h2>
-  <div class="rows">
-    <div class="row"><h3>Consulta de avaliação</h3><p>Primeira conversa com o médico para perceber o que procura e o que é possível.</p><span>30 min</span></div>
-    <div class="row"><h3>Harmonização facial</h3><p>Avaliação e plano de tratamento com ácido hialurónico e toxina botulínica.</p><span>60 min</span></div>
-    <div class="row"><h3>Tratamento laser</h3><p>Sessão com avaliação prévia da pele e acompanhamento.</p><span>60 min</span></div>
+<section class="block" id="procedimentos"><div class="wrap">
+  <h2>Procedimentos</h2>
+  <div class="areas">
+    <div class="area"><h3>Rosto</h3>
+      <p class="kind">Cirurgia</p><ul><li>Rinoplastia</li><li>Blefaroplastia</li><li>Lifting facial</li><li>Otoplastia</li></ul>
+      <p class="kind">Medicina estética</p><ul><li>Toxina botulínica</li><li>Preenchimentos</li><li>Harmonização facial</li></ul></div>
+    <div class="area"><h3>Corpo</h3>
+      <p class="kind">Cirurgia</p><ul><li>Lipoaspiração</li><li>Abdominoplastia</li><li>Lifting de braços e coxas</li></ul>
+      <p class="kind">Medicina estética</p><ul><li>Tratamentos de remodelação</li></ul></div>
+    <div class="area"><h3>Mama</h3>
+      <p class="kind">Cirurgia</p><ul><li>Aumento mamário</li><li>Redução mamária</li><li>Mastopexia</li><li>Ginecomastia</li></ul></div>
+    <div class="area"><h3>Pele e cabelo</h3>
+      <p class="kind">Medicina estética</p><ul><li>Laser</li><li>Peelings</li><li>Bioestimuladores</li><li>Microneedling</li></ul></div>
   </div>
+</div></section>
+
+<section class="block" id="percurso"><div class="wrap">
+  <h2>Como decorre</h2>
+  <ol class="steps">
+    <li><span class="n">1</span><h3>Consulta de avaliação</h3><p>O médico ouve o que pretende, observa a zona em causa e explica as opções, os riscos e a recuperação. Também pode ser por videochamada.</p></li>
+    <li><span class="n">2</span><h3>Plano e orçamento</h3><p>Recebe por escrito o que foi proposto e o valor, para decidir com tempo.</p></li>
+    <li><span class="n">3</span><h3>Procedimento</h3><p>Realizado pela equipa médica, com a preparação e o consentimento informado combinados na consulta.</p></li>
+    <li><span class="n">4</span><h3>Acompanhamento</h3><p>Consultas de seguimento e contacto direto com a clínica depois do procedimento.</p></li>
+  </ol>
+</div></section>
+
+<section class="block" id="equipa"><div class="wrap">
+  <h2>Equipa médica</h2>
+  <div class="team">
+    <div class="person"><h3>Dr. Nome Apelido</h3><p>Cirurgião plástico · Cédula OM n.º 00000</p></div>
+    <div class="person"><h3>Dra. Nome Apelido</h3><p>Medicina estética · Cédula OM n.º 00000</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="perguntas"><div class="wrap">
+  <h2>Perguntas frequentes</h2>
+  <details><summary>Como é a primeira consulta?</summary><p>Dura cerca de 45 minutos em cirurgia plástica e 30 em medicina estética. O médico conversa consigo, observa a zona em causa e explica as opções.</p></details>
+  <details><summary>Posso fazer a consulta por videochamada?</summary><p>Sim, para uma primeira avaliação à distância. Antes de qualquer procedimento há sempre uma consulta presencial.</p></details>
+  <details><summary>Quando sei o valor?</summary><p>Depois da avaliação, porque o valor depende de cada caso. O orçamento é entregue por escrito.</p></details>
+  <details><summary>E se tiver uma dúvida depois do procedimento?</summary><p>Ligue para a clínica, no horário de atendimento. Em caso de urgência, ligue 112.</p></details>
 </div></section>
 
 <section class="block" id="visitar"><div class="wrap cols">
@@ -169,7 +228,7 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
 
 <footer><div class="wrap"><span>© Clínica Exemplo · Registo ERS n.º 000000</span><span>Livro de Reclamações · Política de privacidade · Site de demonstração</span></div></footer>
 
-<button class="btn fab" id="fab" type="button" data-open-chat>Marcar pelo WhatsApp</button>
+<button class="btn fab" id="fab" type="button" data-open-chat>Marcar consulta</button>
 
 <aside class="chat" id="chat" aria-label="Conversa no WhatsApp">
   <div class="chat-head"><div class="avatar">CE</div><div><b>Clínica Exemplo</b><small>online</small></div><button id="closeChat" type="button" aria-label="Fechar conversa">&times;</button></div>
@@ -184,7 +243,7 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
 <aside class="agenda" id="agendaPanel" aria-label="Agenda da clínica">
   <div class="agenda-head"><b>Agenda da clínica</b><button id="closeAgenda" type="button" aria-label="Fechar agenda">&times;</button></div>
   <div class="agenda-body">
-    <p class="note" style="margin-top:12px">O que a receção vê. As marcações feitas na conversa aparecem aqui de imediato. Na versão real, é o Google Calendar da clínica. Os horários ocupados são de exemplo.</p>
+    <p class="note" style="margin-top:12px">O que a receção vê. As marcações e os pedidos de informação feitos na conversa aparecem aqui de imediato. Na versão real, é o Google Calendar da clínica. Os horários ocupados são de exemplo.</p>
     <div id="agenda"></div>
   </div>
 </aside>
@@ -192,7 +251,7 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
 <script src="bot/flow.js"></script>
 <script>
 (function(){
-  var B=window.ClinicBot, cfg=B.DEFAULTS, PHONE='+351 910 000 000', events=[];
+  var B=window.ClinicBot, cfg=B.DEFAULTS, PHONE='+351 910 000 000', events=[], leads=[];
 
   function pseudoBusy(d){ // horários ocupados de exemplo, iguais para o mesmo dia
     var h=0; for(var i=0;i<d.length;i++) h=(h*31+d.charCodeAt(i))>>>0;
@@ -202,7 +261,8 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
   }
   var provider={
     busy:function(d){ return Promise.resolve(pseudoBusy(d).concat(events.filter(function(e){return e.date===d}).map(function(e){return {start:e.time,end:B.addMin(e.time,e.minutes)}}))); },
-    book:function(e){ events.push(e); renderAgenda(e); return Promise.resolve({id:String(events.length)}); }
+    book:function(e){ events.push(e); renderAgenda(e); return Promise.resolve({id:String(events.length)}); },
+    lead:function(l){ leads.push(l); renderAgenda(null,l); return Promise.resolve(); }
   };
 
   var $=function(id){return document.getElementById(id)};
@@ -231,8 +291,9 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
   function openChat(){ chat.classList.add('open'); fab.style.display='none'; if(!session) startChat(); setTimeout(function(){input.focus()},50); }
   function closeChat(){ chat.classList.remove('open'); fab.style.display=''; }
 
-  function renderAgenda(fresh){
+  function renderAgenda(fresh,freshLead){
     var html='', any=false;
+    if(leads.length){ any=true; html+='<h4>Para contactar hoje</h4>'; leads.forEach(function(l){ html+='<div class="ev '+(l===freshLead?'new':'')+'"><time>Pedido de informação</time><div>'+esc(l.name)+'<small>'+esc(l.phone)+' · '+esc(l.topic)+'</small></div></div>'; }); }
     B.upcomingDays(cfg,new Date()).forEach(function(d){
       var rows=pseudoBusy(d).map(function(b){return {t:b.start,e:b.end,l:'Ocupado',s:'',cls:'busy'}});
       events.filter(function(e){return e.date===d}).forEach(function(e){ rows.push({t:e.time,e:B.addMin(e.time,e.minutes),l:e.name+' · '+e.service,s:e.phone+' · pedido por WhatsApp',cls:e===fresh?'new':''}); });
@@ -249,7 +310,7 @@ form.send button{border:0;background:var(--wa-head);color:#fff;border-radius:999
   $('closeChat').addEventListener('click',closeChat);
   $('openAgenda').addEventListener('click',function(){ panel.classList.add('open'); });
   $('closeAgenda').addEventListener('click',function(){ panel.classList.remove('open'); });
-  $('reset').addEventListener('click',function(){ events.length=0; renderAgenda(); startChat(); openChat(); });
+  $('reset').addEventListener('click',function(){ events.length=0; leads.length=0; renderAgenda(); startChat(); openChat(); });
   renderAgenda();
   if(location.hash==='#demo'){ panel.classList.add('open'); openChat(); }
 })();

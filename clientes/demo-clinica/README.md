@@ -9,8 +9,19 @@ Modelo para adaptar a cada clínica. Mostra o que fechamos na videochamada.
 - `bot/server.js`: recebe as mensagens do WhatsApp (API oficial da Meta) e responde.
 - `bot/test.js`: teste da conversa. Correr com `node bot/test.js`.
 
-## Adaptar a uma clínica (5 minutos)
-Em `bot/flow.js`, no objeto `DEFAULTS`: nome da clínica, serviços e duração, horário por dia (inclui o sábado) e a frase da receção. Depois trocar textos e cores em `index.html`.
+## Adaptar a uma clínica
+Em `bot/flow.js`, no objeto `DEFAULTS`:
+- nome, telefone, morada e horário (inclui o sábado);
+- `types`: os tipos de consulta, a duração e as zonas que o paciente pode escolher (rosto, corpo, mama, pele e cabelo);
+- `prepNote`, `videoNote`, `handoff` e `urgent`: as frases que a clínica diz. **Confirmar cada uma com a clínica**, porque descrevem a forma como ela trabalha (por exemplo, se a consulta por videochamada existe, se o link é enviado pela receção, o que o paciente deve trazer).
+
+Em `index.html`: procedimentos, equipa (nome e cédula da Ordem dos Médicos), perguntas frequentes, morada, registo ERS, cores e fotografias da clínica. Os textos de "Como decorre" e das perguntas frequentes também são afirmações da clínica: validar antes de usar.
+
+## O que o assistente faz neste nicho
+- Pergunta o que pretende (cirurgia plástica, medicina estética, videochamada ou só informação) e que zona quer avaliar. A zona vai para o evento do calendário, para o médico saber antes.
+- Pedidos "só quero informação" ficam registados para a equipa contactar (no Google Calendar, um evento de dia inteiro que não bloqueia horários).
+- Dúvidas e receios têm uma resposta calma que leva à consulta. Preços não são dados: o valor é apresentado depois da avaliação.
+- Mensagens sobre complicações, febre ou urgência dão o telefone da clínica e o 112, sem aconselhamento clínico.
 
 ## Pôr a funcionar no WhatsApp a sério
 1. **Google Calendar:** criar uma conta de serviço no Google Cloud, ativar a API do Calendar, partilhar o calendário da clínica com o email da conta de serviço (permissão "Fazer alterações a eventos") e guardar o JSON da conta de serviço.
