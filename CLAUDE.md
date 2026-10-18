@@ -10,6 +10,7 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 ## Ferramentas
 - **Claude Code**: construir os sites e os previews. Cada cliente numa pasta `clientes/<nome-da-clinica>/` deste repo. Funciona na sessão cloud (iPhone) e no MacBook.
 - **Notion** (espaço de diogo@dbweb.pt): base de dados "Empresas a contactar" (https://app.notion.com/p/8a234b4d68824ffaa99e8ddbce0ffaf0) e página "Painel: Clínicas de estética e cirurgia plástica".
+- **Skills instaladas** em `.claude/skills/`: `frontend-design` (desenho com personalidade) e `shadcn`. Outras skills oficiais (docx, pdf, pptx, xlsx, webapp-testing) já existem na conta; o repo completo, para consulta, é `git clone --depth 1 https://github.com/anthropics/skills`.
 - **shadcn/ui** (skill em `.claude/skills/shadcn`, licença MIT): componentes React + Tailwind. Só se aplica a projetos React com `components.json`; os previews atuais são HTML simples. Repo completo de referência: `git clone --depth 1 https://github.com/shadcn-ui/ui`.
 - Idioma de trabalho: português (Portugal).
 
@@ -32,6 +33,7 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 
 ## Regras de trabalho (valem em todas as conversas deste projeto)
 - Sempre que a tarefa envolver interface em React (painéis, formulários, calendário de marcações, janelas, menus, tabelas), usar a skill `shadcn` e os componentes do repo de referência, sem o Diogo precisar de o pedir. Seguir as regras da skill (componentes existentes, variantes, cores semânticas).
+- Sempre que a tarefa for desenhar ou refazer um site, página ou interface, usar a skill `frontend-design` (Apache 2.0, do repo anthropics/skills), sem o Diogo precisar de o pedir: primeiro um plano de desenho específico do assunto, revisto contra o pedido, e só depois o código.
 - Páginas de clínica (landing pages) mantêm desenho próprio, sóbrio e específico do nicho, para não ficarem com o ar genérico de sites feitos em série. Só usar shadcn nelas se o Diogo pedir.
 - Se o projeto ainda não tiver React e Tailwind, avisar antes de os introduzir.
 
