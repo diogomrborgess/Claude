@@ -31,11 +31,15 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 4. Criar 3 previews de clínicas no Claude Code (`clientes/<clinica>/`), só para quem aceitar a videochamada.
 5. Escrever a mensagem de primeiro contacto.
 
+## Ferramentas ligadas (MCP)
+- **chrome-devtools** (`.mcp.json` + `scripts/chrome-devtools-mcp.sh`, versão 1.11.0 fixa, telemetria e CrUX desligados): deixa o Claude abrir páginas num Chrome real, ver a consola e a rede, medir desempenho e tirar capturas. Testado na sessão cloud com Chromium e no Mac usa o Chrome normal. Só aparece em sessões novas e o Claude Code pede aprovação à primeira vez.
+
 ## Regras de trabalho (valem em todas as conversas deste projeto)
 - Sempre que a tarefa envolver interface em React (painéis, formulários, calendário de marcações, janelas, menus, tabelas), usar a skill `shadcn` e os componentes do repo de referência, sem o Diogo precisar de o pedir. Seguir as regras da skill (componentes existentes, variantes, cores semânticas).
 - Sempre que a tarefa for desenhar ou refazer um site, página ou interface, usar a skill `frontend-design` (Apache 2.0, do repo anthropics/skills), sem o Diogo precisar de o pedir: primeiro um plano de desenho específico do assunto, revisto contra o pedido, e só depois o código.
 - Páginas de clínica (landing pages) mantêm desenho próprio, sóbrio e específico do nicho, para não ficarem com o ar genérico de sites feitos em série. Só usar shadcn nelas se o Diogo pedir.
 - Se o projeto ainda não tiver React e Tailwind, avisar antes de os introduzir.
+- Depois de construir ou alterar uma página, verificá-la com o `chrome-devtools` (consola sem erros, telemóvel e desktop, sem scroll lateral) antes de dizer que está pronta.
 
 ## Limitações conhecidas
 - A sessão cloud só abre sites externos se o ambiente tiver Network access aberto (menu do ambiente > Edit). A alteração só vale para sessões novas.
