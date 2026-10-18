@@ -30,6 +30,11 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 4. Criar 3 previews de clínicas no Claude Code (`clientes/<clinica>/`), só para quem aceitar a videochamada.
 5. Escrever a mensagem de primeiro contacto.
 
+## Regras de trabalho (valem em todas as conversas deste projeto)
+- Sempre que a tarefa envolver interface em React (painéis, formulários, calendário de marcações, janelas, menus, tabelas), usar a skill `shadcn` e os componentes do repo de referência, sem o Diogo precisar de o pedir. Seguir as regras da skill (componentes existentes, variantes, cores semânticas).
+- Páginas de clínica (landing pages) mantêm desenho próprio, sóbrio e específico do nicho, para não ficarem com o ar genérico de sites feitos em série. Só usar shadcn nelas se o Diogo pedir.
+- Se o projeto ainda não tiver React e Tailwind, avisar antes de os introduzir.
+
 ## Limitações conhecidas
 - A sessão cloud só abre sites externos se o ambiente tiver Network access aberto (menu do ambiente > Edit). A alteração só vale para sessões novas.
 - Cuidados: regras de publicidade em saúde (ERS, Ordem dos Médicos) e RGPD em chatbots que recolhem dados clínicos.
