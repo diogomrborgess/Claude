@@ -10,6 +10,7 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 ## Ferramentas
 - **Claude Code**: construir os sites e os previews. Cada cliente numa pasta `clientes/<nome-da-clinica>/` deste repo. Funciona na sessão cloud (iPhone) e no MacBook.
 - **Notion** (espaço de diogo@dbweb.pt): base de dados "Empresas a contactar" (https://app.notion.com/p/8a234b4d68824ffaa99e8ddbce0ffaf0) e página "Painel: Clínicas de estética e cirurgia plástica".
+- **shadcn/ui** (skill em `.claude/skills/shadcn`, licença MIT): componentes React + Tailwind. Só se aplica a projetos React com `components.json`; os previews atuais são HTML simples. Repo completo de referência: `git clone --depth 1 https://github.com/shadcn-ui/ui`.
 - Idioma de trabalho: português (Portugal).
 
 ## Estado (16 de outubro de 2026)
