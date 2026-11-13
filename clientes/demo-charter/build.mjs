@@ -8,7 +8,8 @@ import { servicePage, servicesIndex } from './src/services.mjs';
 import { blogIndex, postPage, POSTS } from './src/blog.mjs';
 import { SERVICE_IDS } from './src/layout.mjs';
 
-const here = dirname(fileURLToPath(import.meta.url));
+// OUT=<folder> writes the pages somewhere else (used for shareable previews).
+const here = process.env.OUT || dirname(fileURLToPath(import.meta.url));
 const out = (rel, text) => {
   const file = join(here, rel);
   mkdirSync(dirname(file), { recursive: true });
