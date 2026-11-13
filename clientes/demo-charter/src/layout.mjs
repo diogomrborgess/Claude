@@ -1,4 +1,4 @@
-import { SITE, esc, ctx, IMAGES } from './site.mjs';
+import { SITE, esc, ctx, IMAGES, ogImage as ogFile } from './site.mjs';
 
 export const SERVICE_IDS = ['aviation', 'helicopters', 'yachts', 'transfers'];
 
@@ -126,7 +126,7 @@ export const businessLd = (c) => ({
   url: c.abs('home'),
   telephone: SITE.phoneHref,
   email: SITE.email,
-  image: SITE.url + '/assets/img/hero-home.svg',
+  image: SITE.url + '/assets/img/og-default.jpg',
   address: { '@type': 'PostalAddress', streetAddress: SITE.address.street, postalCode: SITE.address.postal, addressLocality: SITE.address.city, addressCountry: 'PT' },
   areaServed: ['Portugal', 'Europe'],
   openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '00:00', closes: '23:59' },
@@ -154,7 +154,7 @@ export function page(id, L, { title, description, ogImage = 'hero-home', ogType 
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${c.abs()}">
 <meta property="og:locale" content="${L === 'en' ? 'en_GB' : 'pt_PT'}">
-<meta property="og:image" content="${SITE.url}/assets/img/${ogImage}.svg">
+<meta property="og:image" content="${SITE.url}/assets/img/${ogFile(ogImage)}">
 <meta property="og:image:alt" content="${esc(im[L])}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0A1220">

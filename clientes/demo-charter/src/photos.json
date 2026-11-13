@@ -1,0 +1,106 @@
+{
+ "blog-algarve": {
+  "w": 1400,
+  "h": 788
+ },
+ "blog-pricing": {
+  "w": 1400,
+  "h": 788
+ },
+ "blog-wedding": {
+  "w": 1400,
+  "h": 788
+ },
+ "company-work": {
+  "w": 1400,
+  "h": 1867
+ },
+ "fleet-car-minibus": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-car-saloon": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-car-van": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-heli-panoramic": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-heli-single": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-heli-twin": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-jet-light": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-jet-long": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-jet-mid": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-yacht-cat": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-yacht-motor": {
+  "w": 1400,
+  "h": 1050
+ },
+ "fleet-yacht-tender": {
+  "w": 1400,
+  "h": 1050
+ },
+ "head-aviation": {
+  "w": 1920,
+  "h": 1080
+ },
+ "head-company": {
+  "w": 1920,
+  "h": 1080
+ },
+ "head-helicopters": {
+  "w": 1920,
+  "h": 1080
+ },
+ "head-transfers": {
+  "w": 1920,
+  "h": 1080
+ },
+ "head-yachts": {
+  "w": 1920,
+  "h": 1080
+ },
+ "hero-home": {
+  "w": 1920,
+  "h": 1080
+ },
+ "service-aviation": {
+  "w": 1400,
+  "h": 1050
+ },
+ "service-helicopters": {
+  "w": 1400,
+  "h": 1050
+ },
+ "service-transfers": {
+  "w": 1400,
+  "h": 1050
+ },
+ "service-yachts": {
+  "w": 1400,
+  "h": 1050
+ }
+}

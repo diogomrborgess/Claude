@@ -171,7 +171,7 @@ export function postPage(p, L) {
         datePublished: p.date,
         dateModified: p.date,
         inLanguage: L,
-        image: `${SITE.url}/assets/img/${p.image}.svg`,
+        image: `${SITE.url}/assets/img/${p.image}.webp`,
         author: { '@type': 'Organization', name: SITE.legalName },
         publisher: { '@type': 'Organization', name: SITE.legalName },
         mainEntityOfPage: `${SITE.url}/${PATHS[p.id][L]}`,

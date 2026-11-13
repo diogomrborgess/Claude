@@ -33,7 +33,7 @@ Inglês em `/`, português em `/pt/`. Cada texto está escrito nas duas línguas
 
 ## O que falta fornecer antes de publicar
 
-**Imagens:** 30, listadas em `IMAGENS.md` com dimensões e descrição. Hoje são placeholders SVG.
+**Imagens:** 30, listadas em `IMAGENS.md`. Hoje 26 são geradas por IA (só para o protótipo: trocar por fotografia real da frota e dos locais) e as 4 da equipa são placeholders SVG.
 
 **Dados da empresa** (em `src/site.mjs`, marcados com `TODO`):
 - Nome legal, domínio final, morada, telefone, WhatsApp, email
@@ -56,4 +56,4 @@ Inglês em `/`, português em `/pt/`. Cada texto está escrito nas duas línguas
 **Técnico:**
 - Os formulários não enviam dados (mostram só a confirmação). Falta ligar a um email ou CRM
 - O mapa é do OpenStreetMap, carregado de fora. Avaliar o aviso de cookies/terceiros
-- Converter as fotos finais para WebP ou AVIF
+- As fotos finais devem entrar em WebP, em duas larguras (ver `IMAGENS.md`)

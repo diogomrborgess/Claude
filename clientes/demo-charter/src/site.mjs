@@ -1,6 +1,12 @@
 // Shared configuration. Everything marked TODO is a placeholder to be replaced
 // with real information before the site goes live.
 
+import { readFileSync } from 'node:fs';
+
+// Photos that exist as WebP (two widths) in assets/img, with their real dimensions.
+// Keys missing here fall back to a generated SVG placeholder.
+export const PHOTOS = JSON.parse(readFileSync(new URL('./photos.json', import.meta.url), 'utf8'));
+
 export const SITE = {
   name: 'Cabo Raso',
   legalName: 'Cabo Raso Private Charter', // TODO real company name
@@ -132,8 +138,18 @@ ${lines.map((l, i) => `<text x="${cx}" y="${cy + fs * 1.5 * (i + 1.1)}" font-siz
 `;
 }
 
+export const ogImage = (key) => (PHOTOS[key] ? (key === 'hero-home' ? 'og-default.jpg' : key + '.webp') : key + '.svg');
+
 export function img(c, key, { cls = '', eager = false, sizes = '100vw' } = {}) {
   const im = IMAGES[key];
   if (!im) throw new Error('Unknown image ' + key);
-  return `<img src="${c.asset('img/' + key + '.svg')}" alt="${esc(im[c.L])}" width="${im.w}" height="${im.h}"${cls ? ` class="${cls}"` : ''}${eager ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"'} sizes="${sizes}">`;
+  const ph = PHOTOS[key];
+  const load = eager ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"';
+  const klass = cls ? ` class="${cls}"` : '';
+  if (!ph) return `<img src="${c.asset('img/' + key + '.svg')}" alt="${esc(im[c.L])}" width="${im.w}" height="${im.h}"${klass}${load}>`;
+  // Cover images are cropped tall on phones, so they need more pixels than the viewport width.
+  if (cls.includes('cover')) sizes = '(max-width: 700px) 260vw, 100vw';
+  const big = c.asset('img/' + key + '.webp');
+  const small = c.asset('img/' + key + '-800.webp');
+  return `<img src="${big}" srcset="${small} 800w, ${big} ${ph.w}w" sizes="${sizes}" alt="${esc(im[c.L])}" width="${ph.w}" height="${ph.h}"${klass}${load}>`;
 }
