@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+<rect width="1600" height="1100" fill="hsl(212 34% 17%)"/>
+<rect y="704" width="1600" height="396" fill="hsl(212 38% 12%)"/>
+<line x1="0" y1="704" x2="1600" y2="704" stroke="hsl(212 30% 34%)" stroke-width="2"/>
+<g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="hsl(212 24% 66%)">
+<text x="800" y="462" font-size="25">Photo to supply, 1600 x 1100</text>
+<text x="800" y="519.75" font-size="35" fill="hsl(212 28% 80%)">Light jet on the apron with the</text>
+<text x="800" y="572.25" font-size="35" fill="hsl(212 28% 80%)">cabin door open, early morning</text>
+</g>
+</svg>

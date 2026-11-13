@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1000" width="2400" height="1000">
+<rect width="2400" height="1000" fill="hsl(216 34% 17%)"/>
+<rect y="640" width="2400" height="360" fill="hsl(216 38% 12%)"/>
+<line x1="0" y1="640" x2="2400" y2="640" stroke="hsl(216 30% 34%)" stroke-width="3"/>
+<g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="hsl(216 24% 66%)">
+<text x="1200" y="260" font-size="27">Photo to supply, 2400 x 1000</text>
+<text x="1200" y="322.7" font-size="38" fill="hsl(216 28% 80%)">Hangar interior with a jet and a</text>
+<text x="1200" y="379.7" font-size="38" fill="hsl(216 28% 80%)">helicopter, crew walking past</text>
+</g>
+</svg>

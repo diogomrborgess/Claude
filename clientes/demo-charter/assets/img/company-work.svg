@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1700" width="1400" height="1700">
+<rect width="1400" height="1700" fill="hsl(216 34% 17%)"/>
+<rect y="1088" width="1400" height="612" fill="hsl(216 38% 12%)"/>
+<line x1="0" y1="1088" x2="1400" y2="1088" stroke="hsl(216 30% 34%)" stroke-width="2"/>
+<g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="hsl(216 24% 66%)">
+<text x="700" y="714" font-size="22">Photo to supply, 1400 x 1700</text>
+<text x="700" y="763.5" font-size="30" fill="hsl(216 28% 80%)">Operations desk with flight</text>
+<text x="700" y="808.5" font-size="30" fill="hsl(216 28% 80%)">planning charts and a phone</text>
+</g>
+</svg>

@@ -24,6 +24,8 @@ Ficam de fora grupos grandes (CUF, Lusíadas, Clínica do Tempo, Milénio, Saúd
 
 `clientes/mymoment/`: a mesma demo adaptada à MyMoment (proposta de demonstração, não é o site oficial). Telefone, email, ERS e equipa por preencher; ver o README da pasta.
 
+`clientes/demo-charter/`: protótipo de outro nicho (charter de jatos, helicópteros, iates e transfers VIP), empresa fictícia "Cabo Raso" em Lisboa. Site estático EN/PT gerado por `node build.mjs` a partir de `src/`. Ver o README da pasta.
+
 ## Próximos passos
 1. Abrir o site de cada clínica e preencher "Tem site?" no Notion (sem site, site fraco, site bom). Apagar as com site bom.
 2. Juntar telefone, email e Instagram das que ficam.

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1350" width="2400" height="1350">
+<rect width="2400" height="1350" fill="hsl(227 34% 17%)"/>
+<rect y="864" width="2400" height="486" fill="hsl(227 38% 12%)"/>
+<line x1="0" y1="864" x2="2400" y2="864" stroke="hsl(227 30% 34%)" stroke-width="3"/>
+<g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="hsl(227 24% 66%)">
+<text x="1200" y="175.5" font-size="27">Photo to supply, 2400 x 1350</text>
+<text x="1200" y="238.2" font-size="38" fill="hsl(227 28% 80%)">Helicopter over the coast near</text>
+<text x="1200" y="295.2" font-size="38" fill="hsl(227 28% 80%)">Lisbon at dusk, seen from the side</text>
+</g>
+</svg>
